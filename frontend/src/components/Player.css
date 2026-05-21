@@ -1,0 +1,295 @@
+/* ── Player Container ── */
+.player-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 90px;
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  border-top: 1px solid var(--border);
+  z-index: 1000;
+  box-shadow: 0 -1px 0 rgba(255, 75, 75, 0.06);
+}
+
+/* ── Player Info (left section) ── */
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 30%;
+  position: relative;
+}
+
+.player-info h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 0.2rem 0;
+  color: #fff;
+}
+
+.player-cover-small {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.player-cover-small.placeholder {
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinning {
+  animation: spin 10s linear infinite;
+}
+
+.player-info-text h4 {
+  margin: 0;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.player-info-text p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+/* ── Ambient Glow ── */
+.ambient-glow {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 75, 75, 0.15), transparent 70%);
+  pointer-events: none;
+  filter: blur(40px);
+  z-index: 0;
+}
+
+/* ── Cover Art ── */
+.player-cover-small {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: border-radius 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.player-cover-small.spinning {
+  border-radius: 50%;
+  animation: spinCover 8s linear infinite;
+}
+
+@keyframes spinCover {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Like Button ── */
+.like-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  transition: var(--transition);
+  position: relative;
+  z-index: 1;
+}
+
+.like-btn:hover {
+  color: var(--primary);
+  transform: scale(1.15);
+}
+
+.like-btn.liked {
+  color: var(--primary);
+}
+
+/* ── Controls ── */
+.player-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  width: 40%;
+}
+
+.control-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+  color: #fff;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover {
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.play-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: #fff;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.play-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+/* ── Progress Bar ── */
+.progress-bar-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  min-width: 30px;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-bar-bg {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+  transition: height 0.15s ease;
+}
+
+.progress-bar-bg:hover {
+  height: 6px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 2px;
+  transition: background 0.3s ease;
+  position: relative;
+}
+
+/* Gradient fill on hover */
+.progress-bar-bg:hover .progress-bar-fill {
+  background: linear-gradient(to right, var(--primary), var(--accent));
+}
+
+/* Hover dot at the end of the fill */
+.progress-bar-fill::after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+.progress-bar-bg:hover .progress-bar-fill::after {
+  opacity: 1;
+}
+
+/* ── Volume ── */
+.player-volume {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  color: var(--text-muted);
+}
+
+.volume-slider {
+  width: 100px;
+  height: 4px;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  transition: height 0.15s ease;
+}
+
+.volume-slider:hover {
+  height: 6px;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: var(--transition);
+}
+
+.volume-slider:hover::-webkit-slider-thumb {
+  background: var(--primary);
+  transform: scale(1.2);
+  box-shadow: 0 0 8px rgba(255, 75, 75, 0.4);
+}

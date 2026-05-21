@@ -1,0 +1,135 @@
+.playlist-detail {
+  padding-bottom: 100px;
+}
+
+.playlist-banner {
+  display: flex;
+  align-items: flex-end;
+  gap: 2rem;
+  padding: 2rem;
+  margin: -2rem -2rem 2rem -2rem;
+  background: linear-gradient(to bottom, rgba(255, 75, 75, 0.15), transparent);
+}
+
+.playlist-cover {
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  flex-shrink: 0;
+}
+
+.playlist-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.playlist-type {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.playlist-title {
+  font-size: 4rem;
+  font-weight: 900;
+  margin: 0.5rem 0;
+  line-height: 1.1;
+  color: white;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.playlist-meta {
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.playlist-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.btn-play-large {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(255, 75, 75, 0.4);
+  transition: var(--transition);
+}
+
+.btn-play-large:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 8px 32px rgba(255, 75, 75, 0.6);
+}
+
+.btn-play-large:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-delete-playlist {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.btn-delete-playlist:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.playlist-empty {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--text-muted);
+}
+
+.remove-track-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  opacity: 0;
+}
+
+.track-row:hover .remove-track-btn {
+  opacity: 1;
+}
+
+.remove-track-btn:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.playlist-header-skeleton {
+  height: 300px;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
