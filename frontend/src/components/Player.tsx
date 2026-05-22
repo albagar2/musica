@@ -9,7 +9,11 @@ export default function Player() {
     currentTrack, 
     isPlaying, 
     volume, 
+    isShuffle,
+    isRepeat,
     togglePlay, 
+    toggleShuffle,
+    toggleRepeat,
     nextTrack, 
     prevTrack, 
     setVolume 
@@ -78,6 +82,7 @@ export default function Player() {
       <audio 
         ref={audioRef} 
         src={currentTrack.url} 
+        loop={isRepeat}
         onEnded={nextTrack}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
@@ -114,7 +119,14 @@ export default function Player() {
       
       <div className="player-controls">
         <div className="control-buttons">
-          <button className="icon-btn" title="Aleatorio"><Shuffle size={18} /></button>
+          <button 
+            className="icon-btn" 
+            onClick={toggleShuffle} 
+            title="Aleatorio"
+            style={{ color: isShuffle ? 'var(--primary)' : 'inherit' }}
+          >
+            <Shuffle size={18} />
+          </button>
           <button className="icon-btn" onClick={prevTrack} title="Anterior">
             <SkipBack size={22} fill="currentColor" />
           </button>
@@ -124,7 +136,14 @@ export default function Player() {
           <button className="icon-btn" onClick={nextTrack} title="Siguiente">
             <SkipForward size={22} fill="currentColor" />
           </button>
-          <button className="icon-btn" title="Repetir"><Repeat size={18} /></button>
+          <button 
+            className="icon-btn" 
+            onClick={toggleRepeat} 
+            title="Repetir 1"
+            style={{ color: isRepeat ? 'var(--primary)' : 'inherit' }}
+          >
+            <Repeat size={18} />
+          </button>
         </div>
         
         <div className="progress-bar-container">
