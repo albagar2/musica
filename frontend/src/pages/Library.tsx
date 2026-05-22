@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { trackService } from '../services/trackService';
 import { usePlayerStore } from '../hooks/usePlayer';
-import { Search, Play, Music, Clock, ListPlus, Edit3, Trash2 } from 'lucide-react';
+import { Search, Play, Music, Clock, ListPlus, Edit3, Trash2, Plus, Minus } from 'lucide-react';
 import AddToPlaylistModal from '../components/AddToPlaylistModal';
 import EditTrackModal from '../components/EditTrackModal';
 import { useAuthStore } from '../hooks/useAuth';
@@ -18,6 +18,8 @@ export default function Library() {
   const [selectedArtist, setSelectedArtist] = useState('');
   const [genres, setGenres] = useState<string[]>([]);
   const [artists, setArtists] = useState<string[]>([]);
+  const [artistMap, setArtistMap] = useState<Record<string, string>>({});
+  const [visibleArtistsCount, setVisibleArtistsCount] = useState(10);
 
   const [loading, setLoading] = useState(true);
   const [trackToAdd, setTrackToAdd] = useState<string | null>(null);
@@ -31,9 +33,45 @@ export default function Library() {
       setQueue(data);
       
       const uniqueGenres = Array.from(new Set(data.map((t: any) => t.genre))).filter(Boolean) as string[];
-      const uniqueArtists = Array.from(new Set(data.map((t: any) => t.artist?.name))).filter(Boolean) as string[];
+      
+      const allArtists: string[] = [];
+      data.forEach((t: any) => {
+        if (t.artist?.name) {
+          const splitArtists = t.artist.name
+            .split(/,|&|\sy\s|\sft\.?\s|\sfeat\.?\s/i)
+            .map((s: string) => s.trim())
+            .filter(Boolean);
+          allArtists.push(...splitArtists);
+        }
+      });
+
+      // Lógica de agrupación de artistas (ej. "David" y "David Bisbal" -> "David Bisbal")
+      const uniqueRawArtists = Array.from(new Set(allArtists));
+      const sortedByLength = [...uniqueRawArtists].sort((a, b) => b.length - a.length);
+      const canonicalMap: Record<string, string> = {};
+
+      sortedByLength.forEach(name => {
+        const lowerName = name.toLowerCase();
+        // Buscamos si existe un nombre más largo que empiece o termine con este nombre exacto
+        const longerMatch = sortedByLength.find(longerName => 
+          longerName.length > name.length && 
+          (longerName.toLowerCase().startsWith(lowerName + ' ') || 
+           longerName.toLowerCase().endsWith(' ' + lowerName))
+        );
+        
+        if (longerMatch) {
+          // Si encontramos un nombre más largo que lo contiene, lo mapeamos al nombre largo
+          canonicalMap[name] = canonicalMap[longerMatch] || longerMatch;
+        } else {
+          canonicalMap[name] = name;
+        }
+      });
+
+      const uniqueCanonicalArtists = Array.from(new Set(Object.values(canonicalMap))) as string[];
+      
+      setArtistMap(canonicalMap);
       setGenres(uniqueGenres.sort());
-      setArtists(uniqueArtists.sort());
+      setArtists(uniqueCanonicalArtists.sort());
       
       setLoading(false);
     }).catch(() => setLoading(false));
@@ -55,11 +93,27 @@ export default function Library() {
     }
 
     if (selectedArtist) {
-      result = result.filter(t => t.artist?.name === selectedArtist);
+      result = result.filter(t => {
+        if (!t.artist?.name) return false;
+        const splitArtists = t.artist.name
+          .split(/,|&|\sy\s|\sft\.?\s|\sfeat\.?\s/i)
+          .map((s: string) => s.trim());
+          
+        // Mapeamos los artistas de la canción a su nombre canónico/largo
+        const canonicalTrackArtists = splitArtists.map(a => artistMap[a] || a);
+        return canonicalTrackArtists.includes(selectedArtist);
+      });
     }
 
     setFilteredTracks(result);
-  }, [searchQuery, selectedGenre, selectedArtist, tracks]);
+  }, [searchQuery, selectedGenre, selectedArtist, tracks, artistMap]);
+
+  const getInitials = (name: string) => {
+    const parts = name.split(' ').filter(Boolean);
+    if (parts.length === 0) return '??';
+    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  };
 
   const handleDelete = async (track: any, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -85,35 +139,89 @@ export default function Library() {
     <>
       <div className="library-page animate-fade-in">
         <div className="library-header">
-          <h2>Tu Biblioteca</h2>
-          <div className="library-filters">
+          <div className="library-header-top">
+            <h2>Tu Biblioteca</h2>
             <div className="library-search">
               <Search size={18} className="library-search-icon" />
               <input
                 type="text"
-                placeholder="Buscar en tu biblioteca..."
+                placeholder="Buscar canción o artista..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
+          </div>
+          
+          <div className="library-filters-container">
+            {genres.length > 0 && (
+              <div className="filter-scroll-row">
+                <span className="filter-label">Géneros:</span>
+                <button 
+                  className={`filter-pill ${selectedGenre === '' ? 'active' : ''}`}
+                  onClick={() => setSelectedGenre('')}
+                >
+                  Todos
+                </button>
+                {genres.map(g => (
+                  <button 
+                    key={g} 
+                    className={`filter-pill ${selectedGenre === g ? 'active' : ''}`}
+                    onClick={() => setSelectedGenre(g)}
+                  >
+                    {g}
+                  </button>
+                ))}
+              </div>
+            )}
             
-            <select 
-              className="library-select"
-              value={selectedGenre} 
-              onChange={e => setSelectedGenre(e.target.value)}
-            >
-              <option value="">Todos los géneros</option>
-              {genres.map(g => <option key={g} value={g}>{g}</option>)}
-            </select>
-            
-            <select 
-              className="library-select"
-              value={selectedArtist} 
-              onChange={e => setSelectedArtist(e.target.value)}
-            >
-              <option value="">Todos los artistas</option>
-              {artists.map(a => <option key={a} value={a}>{a}</option>)}
-            </select>
+            {artists.length > 0 && (
+              <div className="filter-artists-container">
+                <span className="filter-label">Artistas:</span>
+                <div className="filter-artists-row">
+                  <div 
+                    className={`artist-avatar ${selectedArtist === '' ? 'active' : ''}`}
+                    onClick={() => setSelectedArtist('')}
+                  >
+                    <div className="avatar-circle">
+                      <Music size={20} />
+                    </div>
+                    <span className="avatar-name">Todos</span>
+                  </div>
+                  {artists.slice(0, visibleArtistsCount).map(a => (
+                    <div 
+                      key={a}
+                      className={`artist-avatar ${selectedArtist === a ? 'active' : ''}`}
+                      onClick={() => setSelectedArtist(a)}
+                    >
+                      <div className="avatar-circle">{getInitials(a)}</div>
+                      <span className="avatar-name">{a}</span>
+                    </div>
+                  ))}
+                  {visibleArtistsCount < artists.length && (
+                    <div 
+                      className="artist-avatar show-more-avatar"
+                      onClick={() => setVisibleArtistsCount(prev => prev + 10)}
+                    >
+                      <div className="avatar-circle show-more-circle">
+                        <Plus size={20} />
+                      </div>
+                      <span className="avatar-name">Ver más</span>
+                    </div>
+                  )}
+                  {visibleArtistsCount > 10 && (
+                    <div 
+                      className="artist-avatar show-more-avatar"
+                      onClick={() => setVisibleArtistsCount(10)}
+                    >
+                      <div className="avatar-circle show-more-circle">
+                        <Minus size={20} />
+                      </div>
+                      <span className="avatar-name">Ver menos</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

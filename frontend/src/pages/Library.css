@@ -22,39 +22,158 @@
   margin: 0;
 }
 
-/* Search */
-.library-filters {
+.library-header-top {
   display: flex;
-  gap: 1rem;
+  justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
-.library-select {
-  padding: 0.6rem 1rem;
-  border-radius: 20px;
+.library-filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+}
+
+.filter-scroll-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem; /* Space for scrollbar */
+}
+
+/* Hide scrollbar for a cleaner look, but keep functionality */
+.filter-scroll-row::-webkit-scrollbar {
+  height: 4px;
+}
+.filter-scroll-row::-webkit-scrollbar-track {
+  background: transparent;
+}
+.filter-scroll-row::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.filter-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.filter-pill {
   background: rgba(255, 255, 255, 0.05);
+  color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-  font-family: inherit;
+  padding: 0.4rem 1.2rem;
+  border-radius: 30px;
   font-size: 0.9rem;
-  outline: none;
+  font-weight: 500;
   cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 1em;
-  padding-right: 2.5rem;
-  transition: var(--transition);
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
 }
 
-.library-select:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+.filter-pill:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
 }
 
-.library-select option {
-  background: var(--bg-card);
+.filter-pill.active {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  font-weight: 600;
+}
+
+/* Artist Avatars */
+.filter-artists-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.filter-artists-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  flex-wrap: wrap; /* En lugar de scroll, que bajen a la siguiente línea */
+  margin-top: 0.5rem;
+}
+
+.artist-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.artist-avatar:hover {
+  opacity: 0.8;
+  transform: translateY(-3px);
+}
+
+.artist-avatar.active {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.avatar-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
   color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.artist-avatar.active .avatar-circle {
+  background: linear-gradient(135deg, #ff2a5f, #ff7e40);
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(255, 42, 95, 0.4);
+}
+
+.avatar-name {
+  font-size: 0.75rem;
+  color: white;
+  max-width: 70px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.show-more-avatar {
+  opacity: 0.8;
+}
+
+.show-more-avatar:hover .show-more-circle {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.show-more-circle {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  box-shadow: none;
 }
 
 .library-search {
