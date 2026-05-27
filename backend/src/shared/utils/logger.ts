@@ -12,7 +12,7 @@ const redactSensitive = winston.format((info) => {
   if (typeof info.message === 'string') {
     for (const field of sensitiveFields) {
       const regex = new RegExp(`("${field}"\\s*:\\s*)"[^"]*"`, 'gi');
-      info.message = info.message.replace(regex, `$1"[REDACTED]"`);
+      info.message = (info.message as string).replace(regex, `$1"[REDACTED]"`);
     }
   }
   return info;
