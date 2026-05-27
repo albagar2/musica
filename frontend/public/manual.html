@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Usuario - App de Música</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        h1, h2, h3 {
+            color: #1db954;
+        }
+        code {
+            background-color: #2a2a2a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #f1f1f1;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Manual de Usuario</h1>
+        
+        <div class="section">
+            <h2>1. Introducción</h2>
+            <p>Bienvenido a la aplicación de música. Esta plataforma te permite escuchar música clasificada automáticamente, crear listas de reproducción y sincronizar nuevas canciones en tiempo real.</p>
+        </div>
+
+        <div class="section">
+            <h2>2. Sincronización de Música</h2>
+            <p>Para añadir nuevas canciones a la aplicación, simplemente arrastra tus archivos de audio (formatos <code>.mp3</code> o <code>.m4a</code>) dentro de la carpeta principal <code>music/</code>.</p>
+            <ul>
+                <li>El sistema en segundo plano las detectará automáticamente.</li>
+                <li>Las analizará extrayendo sus metadatos (artista, título, duración).</li>
+                <li>Las clasificará por género y las mostrará en la interfaz.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>3. Clasificación de Géneros</h2>
+            <p>La aplicación utiliza un algoritmo inteligente que analiza el título y el nombre del artista para asignar un género musical. Los géneros soportados actualmente son:</p>
+            <ul>
+                <li><strong>Reggaeton & Urbano</strong></li>
+                <li><strong>Hip Hop & Rap</strong></li>
+                <li><strong>Pop Latino & Hits</strong></li>
+                <li><strong>Clásicos & Chill</strong> (Por defecto)</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>4. Cómo utilizar la interfaz</h2>
+            <ul>
+                <li><strong>Inicio:</strong> Encuentra música reciente y recomendada.</li>
+                <li><strong>Reproductor:</strong> Controles de Play, Pausa, Siguiente y Anterior en la parte inferior.</li>
+                <li><strong>Playlists:</strong> Crea y guarda tus canciones favoritas en colecciones.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

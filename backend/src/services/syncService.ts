@@ -9,30 +9,35 @@ const musicDir = path.join(process.cwd(), '../music');
 import { TrackService } from './trackService';
 
 export class SyncService {
+  // Inicializa el servicio de sincronización
   static init() {
     console.log(`[SyncService] Iniciando sincronización de la carpeta: ${musicDir}`);
     
-    // Asegurar que la carpeta existe
+    // Asegurar que la carpeta existe, si no, la crea
     if (!fs.existsSync(musicDir)) {
       fs.mkdirSync(musicDir, { recursive: true });
     }
 
+    // Configurar el "watcher" (observador) que monitorea cambios en la carpeta de música
     const watcher = chokidar.watch(musicDir, {
-      ignored: /(^|[\/\\])\../, // ignore dotfiles
+      ignored: /(^|[\/\\])\../, // Ignorar archivos ocultos
       persistent: true,
       awaitWriteFinish: {
-        stabilityThreshold: 2000,
+        stabilityThreshold: 2000, // Esperar a que el archivo deje de modificarse por 2s
         pollInterval: 100
       }
     });
 
+    // Eventos del observador
     watcher
       .on('add', async (filePath) => {
+        // Cuando se añade un nuevo archivo .mp3 o .wav, procesarlo
         if (filePath.endsWith('.mp3') || filePath.endsWith('.wav')) {
           await this.handleFileAdded(filePath);
         }
       })
       .on('unlink', async (filePath) => {
+        // Cuando se elimina un archivo, quitarlo de la base de datos
         if (filePath.endsWith('.mp3') || filePath.endsWith('.wav')) {
           await this.handleFileRemoved(filePath);
         }

@@ -17,11 +17,13 @@ const premiumArtists = [
   'The Wavemaker', 'Aero Groove', 'Stella Polaris', 'Pixel Perfect'
 ];
 
+// Función para asignar automáticamente un género musical a una canción
+// Se basa en palabras clave en el título de la canción y en el nombre del artista.
 function getGenreForTrack(title: string, artistName: string): string {
   const t = title.toLowerCase();
   const a = artistName.toLowerCase();
 
-  // Reggaeton & Urbano
+  // Detección de Reggaeton & Urbano analizando artistas populares y palabras clave
   if (
     a.includes('quevedo') || 
     a.includes('gyal') || 
@@ -74,7 +76,7 @@ function getGenreForTrack(title: string, artistName: string): string {
     return 'Reggaeton & Urbano';
   }
 
-  // Hip Hop & Rap
+  // Detección de Hip Hop & Rap analizando raperos y grupos del género
   if (
     a.includes('delaossa') || 
     a.includes('fernandocosta') || 
@@ -94,7 +96,7 @@ function getGenreForTrack(title: string, artistName: string): string {
     return 'Hip Hop & Rap';
   }
 
-  // Pop Latino & Hits
+  // Detección de Pop Latino & Hits analizando artistas de pop comercial
   if (
     a.includes('aitana') || 
     a.includes('yatra') || 
@@ -117,7 +119,7 @@ function getGenreForTrack(title: string, artistName: string): string {
     return 'Pop Latino & Hits';
   }
 
-  // Fallback
+  // Fallback: Si no coincide con ninguno, se agrupa en una categoría genérica
   return 'Clásicos & Chill';
 }
 
