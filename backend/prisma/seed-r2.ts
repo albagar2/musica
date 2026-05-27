@@ -136,7 +136,7 @@ async function main() {
 
       if (!artist) {
         const safeArtistName = artistName.toLowerCase().replace(/[^a-z0-9]/g, '');
-        const artistEmail = `${safeArtistName || 'artist' + uniqueSuffix}@soundwave.com`;
+        const artistEmail = `${safeArtistName || 'artist'}_${uniqueSuffix}@soundwave.com`;
         
         let artistUser = await prisma.user.findUnique({ where: { email: artistEmail } });
         if (!artistUser) {
