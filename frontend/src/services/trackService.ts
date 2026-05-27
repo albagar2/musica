@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = '/api/tracks';
+const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_URL = `${API_BASE}/api/tracks`;
 
 export const trackService = {
   async getAll() {

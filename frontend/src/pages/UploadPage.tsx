@@ -37,7 +37,8 @@ export default function UploadPage() {
     formData.append('genre', genre);
     
     try {
-      await axios.post('/api/tracks/upload', formData, {
+      const API_BASE = import.meta.env.VITE_API_URL || '';
+      await axios.post(`${API_BASE}/api/tracks/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setStatus('success');
