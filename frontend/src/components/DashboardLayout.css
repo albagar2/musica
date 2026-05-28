@@ -149,3 +149,20 @@
   padding: 2rem 3rem;
   flex: 1;
 }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    margin-bottom: 120px;
+  }
+  .dashboard-header {
+    padding: 0 1rem;
+  }
+  .header-search {
+    display: none;
+  }
+  .content-area {
+    padding: 1rem;
+  }
+}

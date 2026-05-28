@@ -293,3 +293,28 @@
   transform: scale(1.2);
   box-shadow: 0 0 8px rgba(255, 75, 75, 0.4);
 }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .player-container {
+    height: auto;
+    padding: 0.8rem 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 20px;
+  }
+  .player-info {
+    width: 100%;
+    margin-bottom: 0.8rem;
+    justify-content: center;
+  }
+  .player-controls {
+    width: 100%;
+    order: 3;
+  }
+  .player-volume {
+    display: none;
+  }
+  .ambient-glow {
+    display: none;
+  }
+}
