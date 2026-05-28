@@ -1,6 +1,33 @@
 import { Request, Response } from 'express';
 import { TrackService } from '../services/trackService';
 import { asyncHandler } from '../shared/utils/asyncHandler';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+
+const s3 = new S3Client({
+  region: 'auto',
+  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
+  }
+});
+const BUCKET_NAME = process.env.R2_BUCKET_NAME || 'musica';
+const PUBLIC_R2_URL = process.env.R2_PUBLIC_URL || 'https://pub-your-r2-url.r2.dev';
+
+async function uploadToR2(file: Express.Multer.File, isAudio: boolean): Promise<string> {
+  const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+  const ext = file.originalname.substring(file.originalname.lastIndexOf('.'));
+  const filename = (isAudio ? 'audio-' : 'cover-') + uniqueSuffix + ext;
+  
+  await s3.send(new PutObjectCommand({
+    Bucket: BUCKET_NAME,
+    Key: filename,
+    Body: file.buffer,
+    ContentType: file.mimetype,
+  }));
+  
+  return `${PUBLIC_R2_URL}/${filename}`;
+}
 
 export class TrackController {
   static getAll = asyncHandler(async (req: Request, res: Response) => {
@@ -22,12 +49,15 @@ export class TrackController {
 
     if (!audioFile) throw new Error('No se subió el archivo de audio');
 
+    const audioUrl = await uploadToR2(audioFile, true);
+    const coverUrl = coverFile ? await uploadToR2(coverFile, false) : undefined;
+
     const track = await TrackService.create({
       title,
       duration: parseInt(duration),
       artistId,
-      url: `/music/${audioFile.filename}`,
-      coverUrl: coverFile ? `/uploads/images/${coverFile.filename}` : undefined,
+      url: audioUrl,
+      coverUrl,
       genre
     });
 
@@ -52,7 +82,7 @@ export class TrackController {
     };
 
     if (file) {
-      updateData.coverUrl = `/uploads/images/${file.filename}`;
+      updateData.coverUrl = await uploadToR2(file, false);
     }
 
     const updatedTrack = await TrackService.updateTrack(id, updateData);
