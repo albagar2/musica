@@ -45,6 +45,11 @@ export function authenticate(
       role: decoded.role,
     };
 
+    // Bloquear modificaciones para la cuenta Demo
+    if (req.user.email === 'demo@soundwave.com' && req.method !== 'GET') {
+      throw AppError.forbidden('Modo Demo: Puedes explorar la aplicación, pero no modificar datos.');
+    }
+
     next();
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
