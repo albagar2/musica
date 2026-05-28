@@ -233,6 +233,35 @@ npm run dev
 
 ---
 
+## 📱 Progressive Web App (PWA)
+
+SoundWave funciona como una aplicación instalable en móvil y escritorio:
+- **Modo Offline**: Al escuchar una canción con conexión, se guarda en la memoria caché local. Si pierdes el internet, podrás seguir reproduciendo tu música descargada y navegando por la app sin interrupciones.
+- **Instalable**: Puedes usar "Añadir a la pantalla de inicio" en iOS/Android o instalarla en Chrome/Edge.
+
+---
+
+## ☁️ Despliegue en la Nube (Producción)
+
+Esta aplicación está completamente preparada para producción utilizando servicios serverless y en la nube:
+
+1. **Frontend (Vercel)**
+   - La Single Page Application (SPA) se compila con Vite y se despliega en Vercel.
+   - Requiere la variable de entorno `VITE_API_URL` apuntando al backend.
+
+2. **Backend (Render)**
+   - La API Node.js/Express se despliega como un Web Service en Render.
+   - Maneja rutas, autenticación y la conexión con la base de datos y almacenamiento.
+
+3. **Base de Datos (Neon.tech PostgreSQL)**
+   - Sustituimos SQLite por **PostgreSQL** alojado en Neon.tech para soportar migraciones seguras y escalabilidad.
+
+4. **Almacenamiento de Canciones (Cloudflare R2)**
+   - Los archivos de audio MP3 subidos a través de la aplicación se suben **directamente a Cloudflare R2** en memoria volátil (sin guardarse en el disco de Render).
+   - Necesitas configurar: `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_NAME` y `R2_PUBLIC_URL` en las variables de entorno del servidor.
+
+---
+
 ## 📡 API REST
 
 ### Autenticación
